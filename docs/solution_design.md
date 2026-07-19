@@ -12,54 +12,31 @@ scoped intentionally to the size of the task.
 
 ## 2. Tech stack
 
-| Concern              | Choice                          |
-|-----------------------|----------------------------------|
-| Language              | TypeScript                      |
-| Runtime                | Node.js 20+                     |
-| Web framework          | Express.js 4                    |
-| Validation             | zod                             |
-| HTTP request logging   | morgan                          |
-| Security headers       | helmet                          |
-| Dev server / reload    | tsx                             |
-| Build                   | tsc                              |
-| Testing                | Jest + Supertest                |
-| Linting / formatting   | ESLint + Prettier                |
+| Concern              | Choice            |
+| -------------------- | ----------------- |
+| Language             | TypeScript        |
+| Runtime              | Node.js 20+       |
+| Web framework        | Express.js 4      |
+| Validation           | zod               |
+| HTTP request logging | morgan            |
+| Security headers     | helmet            |
+| Dev server / reload  | tsx               |
+| Build                | tsc               |
+| Testing              | Jest + Supertest  |
+| Linting / formatting | ESLint + Prettier |
 
 ### Why Express (and why NestJS would be the better production choice)
 
-Express is used here because it's the pragmatic choice for a service of
-this size: minimal ceremony, fast to set up, and the whole task is a couple
-of routes plus one in-memory store. Pulling in a full framework would be
-over-engineering for what's asked.
+Express keeps this exercise lean — minimal ceremony for what's really a
+couple of routes and one in-memory store; a full framework would be
+over-engineering here.
 
 For a real production payment-intake service, **NestJS** would be the
-better long-term choice:
-
-- **Built-in DI container** — repositories/services are provided and
-  injected instead of manually wired, which matters once there are more
-  modules (ledger client, notifications, auditing, etc.) and you want to
-  swap implementations (e.g. in-memory → Postgres repository) without
-  touching consumers.
-- **Structural conventions enforced by the framework** (modules,
-  controllers, providers) — reduces bikeshedding and keeps large codebases
-  consistent across teams, instead of relying on discipline alone as in
-  Express.
-- **First-class validation via pipes** (`class-validator` /
-  `nestjs-zod`) integrated into the request lifecycle, rather than being
-  called manually in each handler.
-- **Testing ergonomics** — the DI container makes it trivial to swap real
-  providers for mocks/fakes in unit tests without monkeypatching modules.
-- **Built-in support for cross-cutting concerns** — guards, interceptors,
-  exception filters — which map well to things this kind of service will
-  eventually need (auth, idempotency-key handling, structured audit
-  logging, rate limiting).
-- **OpenAPI generation** out of the box via decorators, useful once other
-  services (like the ledger) need to integrate against this API's contract.
-
-In short: Express keeps this exercise lean; NestJS is what I'd reach for
-once this service has multiple developers, multiple modules, and needs to
-be integrated with other systems (e.g. the ledger service mentioned in the
-task) rather than living on its own.
+better long-term choice: enforced structural
+conventions across modules, validation via pipes, and built-in support for
+cross-cutting concerns (guards, interceptors, exception filters, OpenAPI)
+that this kind of service eventually needs (auth, idempotency-key
+handling, audit logging, rate limiting).
 
 ## 3. Architecture
 
@@ -138,9 +115,7 @@ Rationale:
   `payments.repository.ts` holds the **interface** and the in-memory
   implementation. Swapping storage later means adding a new file and
   changing one line of composition — not touching the service.
-- **`common/`** holds cross-cutting pieces (error handling, logging,
-  shared error types) used by every module, keeping modules themselves free
-  of infrastructure concerns.
+- **`common/`** holds cross-cutting pieces used by every module
 
 ## 5. Validation rules (via zod)
 
