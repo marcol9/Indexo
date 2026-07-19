@@ -70,8 +70,8 @@ describe("POST /payments", () => {
   });
 
   it("omits or nulls reference when not provided", async () => {
-    const { reference: _reference, ...withoutReference } = validPayment;
-    const payment = { ...withoutReference, paymentId: "no-reference" };
+    const payment = { ...validPayment, paymentId: "no-reference" };
+    delete (payment as { reference?: string }).reference;
 
     await request(app).post("/payments").send(payment);
     const listRes = await request(app).get("/payments");
