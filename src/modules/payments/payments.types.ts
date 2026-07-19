@@ -1,6 +1,6 @@
 export type Currency = "EUR" | "USD" | "GBP";
 
-/** A payment accepted into the store (see docs/solution_design.md §4). */
+/** A payment accepted into the store */
 export interface Payment {
   paymentId: string;
   amount: number;

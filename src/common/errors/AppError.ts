@@ -1,6 +1,6 @@
 /**
- * Base class for errors that should be mapped directly to an HTTP response
- * by the central error-handling middleware (see docs/solution_design.md §7).
+ * Base class for errors that is mapped directly to an HTTP response
+ * by the central error-handling middleware
  */
 export class AppError extends Error {
   public readonly statusCode: number;

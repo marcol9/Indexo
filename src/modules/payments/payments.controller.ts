@@ -3,7 +3,7 @@ import { paymentInputSchema } from "./payments.schema";
 import { PaymentService } from "./payments.service";
 import { InMemoryPaymentRepository } from "./payments.repository";
 
-// Single in-memory store for the process lifetime (see docs/solution_design.md §4).
+// Single in-memory store for the process lifetime
 const paymentService = new PaymentService(new InMemoryPaymentRepository());
 
 export function createPayment(req: Request, res: Response): void {

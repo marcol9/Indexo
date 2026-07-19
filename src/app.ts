@@ -8,8 +8,10 @@ import { paymentsRouter } from "./modules/payments/payments.routes";
 export const app = express();
 
 app.use(helmet());
+
 app.use(requestLogger);
-// Small body size limit to avoid trivially large payload abuse (see docs/solution_design.md §8).
+
+// Small body size limit to avoid trivially large payload abuse.
 app.use(express.json({ limit: "100kb" }));
 
 app.use("/payments", paymentsRouter);

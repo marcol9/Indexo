@@ -4,7 +4,7 @@ import type { Payment } from "./payments.types";
 
 export interface SubmitPaymentResult {
   payment: Payment;
-  /** false when this paymentId was already accepted — see docs/solution_design.md §6. */
+  /** false when this paymentId was already accepted */
   created: boolean;
 }
 

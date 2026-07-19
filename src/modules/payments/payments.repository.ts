@@ -1,7 +1,7 @@
 import type { Payment } from "./payments.types";
 
 /**
- * Port for payment persistence (see docs/solution_design.md §3). The service
+ * Port for payment persistence. The service
  * depends only on this interface, so storage can be swapped later without
  * touching the service or controller layer.
  */
@@ -11,7 +11,7 @@ export interface PaymentRepository {
   findAll(): Payment[];
 }
 
-/** In-memory adapter. A Map preserves insertion order, matching §6's acceptance-order requirement. */
+/** In-memory adapter. A Map preserves insertion order */
 export class InMemoryPaymentRepository implements PaymentRepository {
   private readonly paymentsById = new Map<string, Payment>();
 

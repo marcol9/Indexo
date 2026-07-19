@@ -3,9 +3,8 @@ import { ZodError } from "zod";
 import { AppError } from "../errors/AppError";
 
 /**
- * Central error handler (see docs/solution_design.md §7). Must be registered
- * last, after notFound. Maps every error to a 4xx/5xx JSON response —
- * nothing thrown or rejected in a route handler reaches Express's defaults.
+ * Central error handler. Must be registered
+ * last, after notFound. Maps every error to a 4xx/5xx JSON response.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function errorHandler(err: unknown, _req: Request, res: Response, _next: NextFunction): void {
@@ -32,7 +31,7 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
     return;
   }
 
-  // Truly unexpected failure — never bad client input, so 500 is appropriate here only.
+  // Unexpected failure — never bad client input, so 500 is appropriate here only.
   console.error(err);
   res.status(500).json({ error: "InternalServerError", message: "Something went wrong" });
 }
